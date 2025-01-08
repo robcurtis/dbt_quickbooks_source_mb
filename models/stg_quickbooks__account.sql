@@ -1,6 +1,7 @@
 with base as (
     select *
     from {{ ref('stg_quickbooks__account_tmp') }}
+    where account_number <> '1116' and account_number <> '1120'
 
 ),
 
