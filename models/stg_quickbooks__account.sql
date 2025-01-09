@@ -1,7 +1,7 @@
 with base as (
     select *
     from {{ ref('stg_quickbooks__account_tmp') }}
-    where account_number <> '1105' and account_number <> '1116' and account_number <> '1120'
+    where account_number <> '1116' and account_number <> '1120'
 
 ),
 
@@ -36,8 +36,8 @@ final as (
     select
         cast(id as {{ dbt.type_string() }}) as account_id,
         cast(account_number as {{ dbt.type_string() }}) as account_number,
-        sub_account as is_sub_account,
-        cast(parent_account_id as {{ dbt.type_string() }}) as parent_account_id,
+        CASE WHEN cast(account_number as {{ dbt.type_string() }}) = '1105' THEN true ELSE sub_account END as is_sub_account,
+        CASE WHEN cast(account_number as {{ dbt.type_string() }}) = '1105' THEN '76' ELSE cast(parent_account_id as {{ dbt.type_string() }}) END as parent_account_id,
         name,
         account_type,
         account_sub_type,
