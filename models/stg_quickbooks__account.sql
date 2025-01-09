@@ -27,6 +27,8 @@ account as (
         }}
 
     from base
+    where 
+        is_active = true
 ),
 
 final as (
