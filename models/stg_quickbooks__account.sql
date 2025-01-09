@@ -72,8 +72,8 @@ final as (
         OR (
         is_sub_account = true AND parent_account_id in (
             select id 
-            from base p
-            where p.is_active = true
+            from account a
+            where a.is_active = true
         )
     ) AND
         (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
