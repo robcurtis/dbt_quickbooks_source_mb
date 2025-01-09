@@ -1,11 +1,6 @@
 with base as (
     select *
     from {{ ref('stg_quickbooks__account_tmp') }}
-    where 
-        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
-        (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
-        (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
-
 ),
 
 account as (
@@ -73,6 +68,10 @@ final as (
         source_relation,
         _fivetran_deleted 
     from account
+    where 
+        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
+        (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
+        (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
 )
 
 select *
