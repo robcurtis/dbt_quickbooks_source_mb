@@ -25,10 +25,7 @@ account as (
                 union_database_variable='quickbooks_union_databases'
                 ) 
         }}
-
     from base
-    where 
-        is_active = true
 ),
 
 final as (
@@ -71,6 +68,14 @@ final as (
         _fivetran_deleted 
     from account
     where 
+        (is_sub_account = false AND is_active = true) 
+        OR (
+        is_sub_account = true AND parent_account_id in (
+            select id 
+            from base p
+            where p.is_active = true
+        )
+    ) AND
         (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
