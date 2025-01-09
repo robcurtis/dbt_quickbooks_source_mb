@@ -68,7 +68,7 @@ final as (
         _fivetran_deleted 
     from account
     where 
-        (sub_account = false AND is_active = true) 
+        (sub_account = false AND active = true) 
         OR (
             sub_account = true AND (
                 CASE WHEN 
