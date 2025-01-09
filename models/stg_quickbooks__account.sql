@@ -68,12 +68,25 @@ final as (
         _fivetran_deleted 
     from account
     where 
-        (is_sub_account = false AND is_active = true) 
+        (sub_account = false AND is_active = true) 
         OR (
-        is_sub_account = true AND parent_account_id in (
+            sub_account = true AND (
+                CASE WHEN 
+                (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
+                (source_relation = 'quickbooks_bhec' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
+                (source_relation = 'quickbooks_bvsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1121')) 
+                THEN (
+                    SELECT MAX(id)  -- Using MAX to ensure single result
+                    FROM account a
+                    WHERE a.source_relation = source_relation 
+                    AND a.account_number = '1100'
+                )
+            ELSE cast(parent_account_id as {{ dbt.type_string() }}) 
+            END -- parent_account_id
+        ) in (
             select id 
             from account a
-            where a.is_active = true
+            where a.active = true
         )
     ) AND
         (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
