@@ -68,7 +68,7 @@ final as (
         _fivetran_deleted 
     from account
     where 
-        (sub_account = false AND active = true) 
+        ((sub_account = false AND active = true) 
         OR (
             sub_account = true AND (
                 CASE WHEN 
@@ -88,10 +88,11 @@ final as (
             from account a
             where a.active = true
         )
-    ) OR
+    )) AND (
         (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
+    )
 )
 
 select *
