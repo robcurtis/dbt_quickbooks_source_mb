@@ -34,14 +34,14 @@ final as (
         cast(id as {{ dbt.type_string() }}) as account_id,
         cast(account_number as {{ dbt.type_string() }}) as account_number,
         CASE WHEN 
-            (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
+            (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1197')) or
             (source_relation = 'quickbooks_bhec' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
             (source_relation = 'quickbooks_bvsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1121'))
             THEN true 
         ELSE sub_account 
         END as is_sub_account,
         CASE WHEN 
-            (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
+            (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1197')) or
             (source_relation = 'quickbooks_bhec' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
             (source_relation = 'quickbooks_bvsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1121')) 
             THEN (
@@ -72,9 +72,9 @@ final as (
         OR (
             sub_account = true AND (
                 CASE WHEN 
-                (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
-                (source_relation = 'quickbooks_bhec' and cast(account_number as {{ dbt.type_string() }}) = '1105') or
-                (source_relation = 'quickbooks_bvsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1121')) 
+                (source_relation = 'quickbooks_bhdsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1197')) or
+                (source_relation = 'quickbooks_bhec' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1197')) or
+                (source_relation = 'quickbooks_bvsc' and cast(account_number as {{ dbt.type_string() }}) IN ('1105', '1121'))
                 THEN (
                     SELECT MAX(id)  -- Using MAX to ensure single result
                     FROM account a
@@ -89,7 +89,7 @@ final as (
             where a.active = true
         )
     )) AND (
-        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120' and account_number <> '1199') or 
+        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120' and account_number <> '1198' and account_number <> '1199') or 
         (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
     )
