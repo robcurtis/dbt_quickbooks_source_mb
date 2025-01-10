@@ -89,7 +89,7 @@ final as (
             where a.active = true
         )
     )) AND (
-        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120' and account_number <> '1198' and account_number <> '1199') or 
+        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
     )
