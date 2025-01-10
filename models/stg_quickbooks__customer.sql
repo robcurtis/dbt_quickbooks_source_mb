@@ -46,6 +46,7 @@ final as (
         display_name,
         website,
         taxable,
+        cast(ar_account_id as {{ dbt.type_string() }}) as ar_account_id,
         source_relation,
         _fivetran_deleted
 
