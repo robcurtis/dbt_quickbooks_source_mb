@@ -38,26 +38,26 @@ fields as (
 final as (
     
     select 
-        cast(id as {{ dbt.type_string() }}) as invoice_id,
-        balance,
-        cast(doc_number as {{ dbt.type_string() }}) as doc_number,
-        total_amount,
-        currency_id,
-        cast(department_id as {{ dbt.type_string() }}) as department_id,
-        cast(deposit_to_account_id as {{ dbt.type_string() }}) as deposit_to_account_id,
+        cast(f.id as {{ dbt.type_string() }}) as invoice_id,
+        f.balance,
+        cast(f.doc_number as {{ dbt.type_string() }}) as doc_number,
+        f.total_amount,
+        f.currency_id,
+        cast(f.department_id as {{ dbt.type_string() }}) as department_id,
+        cast(f.deposit_to_account_id as {{ dbt.type_string() }}) as deposit_to_account_id,
         cast(c.ar_account_id as {{ dbt.type_string() }}) as receivable_account_id,
-        exchange_rate,
-        cast( {{ dbt.date_trunc('day', 'transaction_date') }} as date) as transaction_date,
-        cast(customer_id as {{ dbt.type_string() }}) as customer_id,
-        cast(billing_address_id as {{ dbt.type_string() }}) as billing_address_id,
-        shipping_address_id,
-        delivery_type,
-        cast( {{ dbt.date_trunc('day', 'due_date') }} as date) as due_date, 
-        cast(class_id as {{ dbt.type_string() }}) as class_id,
-        created_at,
-        updated_at,
-        _fivetran_deleted,
-        source_relation
+        f.exchange_rate,
+        cast( {{ dbt.date_trunc('day', 'f.transaction_date') }} as date) as transaction_date,
+        cast(f.customer_id as {{ dbt.type_string() }}) as customer_id,
+        cast(f.billing_address_id as {{ dbt.type_string() }}) as billing_address_id,
+        f.shipping_address_id,
+        f.delivery_type,
+        cast( {{ dbt.date_trunc('day', 'f.due_date') }} as date) as due_date, 
+        cast(f.class_id as {{ dbt.type_string() }}) as class_id,
+        f.created_at,
+        f.updated_at,
+        f._fivetran_deleted,
+        f.source_relation
     from fields f
     left join {{ ref('stg_quickbooks__customer') }} c
         on f.customer_id = c.customer_id
