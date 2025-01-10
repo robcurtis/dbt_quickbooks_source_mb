@@ -45,6 +45,7 @@ final as (
         currency_id,
         cast(department_id as {{ dbt.type_string() }}) as department_id,
         cast(deposit_to_account_id as {{ dbt.type_string() }}) as deposit_to_account_id,
+        cast(c.ar_account_id as {{ dbt.type_string() }}) as receivable_account_id,
         exchange_rate,
         cast( {{ dbt.date_trunc('day', 'transaction_date') }} as date) as transaction_date,
         cast(customer_id as {{ dbt.type_string() }}) as customer_id,
@@ -57,7 +58,10 @@ final as (
         updated_at,
         _fivetran_deleted,
         source_relation
-    from fields
+    from fields f
+    left join {{ ref('stg_quickbooks__customer') }} c
+        on f.customer_id = c.customer_id
+        and f.source_relation = c.source_relation
 )
 
 select * 
