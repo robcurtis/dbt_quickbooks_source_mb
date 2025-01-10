@@ -78,8 +78,8 @@ final as (
                 THEN (
                     SELECT MAX(id)  -- Using MAX to ensure single result
                     FROM account a
-                    WHERE a.source_relation = source_relation 
-                    AND a.account_number = '1100'
+                    WHERE a.source_relation = account.source_relation 
+                    AND cast(a.account_number as {{ dbt.type_string() }}) = '1100'
                 )
             ELSE cast(parent_account_id as {{ dbt.type_string() }}) 
             END -- parent_account_id
