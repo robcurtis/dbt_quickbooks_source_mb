@@ -47,10 +47,10 @@ final as (
         end as is_sub_account,
         case 
             when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
-                (select cast(id as {{ dbt.type_string() }})
-                 from ar_accounts
-                 where ar_rank = 1 
-                 and source_relation = a.source_relation)
+                (select cast(ar2.id as {{ dbt.type_string() }})
+                 from ar_accounts ar2
+                 where ar2.ar_rank = 1 
+                 and ar2.source_relation = a.source_relation)
             else cast(parent_account_id as {{ dbt.type_string() }})
         end as parent_account_id,
         name,
