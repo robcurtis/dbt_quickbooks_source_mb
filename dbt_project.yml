@@ -12,7 +12,7 @@ models:
     tmp:
       materialized: view 
 vars:
-  quickbooks_union_schemas: ['quickbooks_bhdsc', 'quickbooks_bhec', 'quickbooks_bvsc']
+  quickbooks_union_schemas: ['quickbooks_bhdsc', 'quickbooks_bhec', 'quickbooks_bvsc', 'quickbooks_cove']
   quickbooks_source:
     account: "{{ source('quickbooks','account') }}"
     address: "{{ source('quickbooks','address') }}"
