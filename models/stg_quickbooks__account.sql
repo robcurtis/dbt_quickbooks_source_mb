@@ -28,33 +28,54 @@ account as (
     from base
 ),
 
-final as (
+ar_accounts as (
+    select 
+        id,
+        source_relation,
+        row_number() over (partition by source_relation order by updated_at desc) as ar_rank
+    from account 
+    where account.active = true and account.account_sub_type = 'AccountsReceivable'
+),
 
+final as (
     select
         cast(id as {{ dbt.type_string() }}) as account_id,
         cast(account_number as {{ dbt.type_string() }}) as account_number,
-        sub_account as is_sub_account,
-        cast(parent_account_id as {{ dbt.type_string() }}) as parent_account_id,
+        case 
+            when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then true
+            else sub_account
+        end as is_sub_account,
+        case 
+            when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
+                (select cast(id as {{ dbt.type_string() }})
+                 from ar_accounts
+                 where ar_rank = 1 
+                 and source_relation = a.source_relation)
+            else cast(parent_account_id as {{ dbt.type_string() }})
+        end as parent_account_id,
         name,
         account_type,
         account_sub_type,
         classification,
         balance,
         balance_with_sub_accounts,
-        CASE 
-            WHEN account_sub_type = 'AccountsReceivable' and balance = 0 and balance_with_sub_accounts = 0 
-                THEN false 
-            ELSE active 
-        END as is_active,
+        case 
+            when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
+                false
+            else active
+        end as is_active,
         created_at,
         currency_id,
         description,
         fully_qualified_name,
         updated_at,
-        source_relation,
+        a.source_relation,
         _fivetran_deleted
 
-    from account
+    from account a
+    left join ar_accounts ar 
+        on a.id = ar.id 
+        and a.source_relation = ar.source_relation
 )
 
 select *
