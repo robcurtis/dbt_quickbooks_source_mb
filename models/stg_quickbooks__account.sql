@@ -39,11 +39,11 @@ ar_accounts as (
 
 final as (
     select
-        cast(id as {{ dbt.type_string() }}) as account_id,
-        cast(account_number as {{ dbt.type_string() }}) as account_number,
+        cast(a.id as {{ dbt.type_string() }}) as account_id,
+        cast(a.account_number as {{ dbt.type_string() }}) as account_number,
         case 
             when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then true
-            else sub_account
+            else a.sub_account
         end as is_sub_account,
         case 
             when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
@@ -51,26 +51,26 @@ final as (
                  from ar_accounts ar2
                  where ar2.ar_rank = 1 
                  and ar2.source_relation = a.source_relation)
-            else cast(parent_account_id as {{ dbt.type_string() }})
+            else cast(a.parent_account_id as {{ dbt.type_string() }})
         end as parent_account_id,
-        name,
-        account_type,
-        account_sub_type,
-        classification,
-        balance,
-        balance_with_sub_accounts,
+        a.name,
+        a.account_type,
+        a.account_sub_type,
+        a.classification,
+        a.balance,
+        a.balance_with_sub_accounts,
         case 
             when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
                 false
             else active
         end as is_active,
-        created_at,
-        currency_id,
-        description,
-        fully_qualified_name,
-        updated_at,
+        a.created_at,
+        a.currency_id,
+        a.description,
+        a.fully_qualified_name,
+        a.updated_at,
         a.source_relation,
-        _fivetran_deleted
+        a._fivetran_deleted
 
     from account a
     left join ar_accounts ar 
