@@ -47,7 +47,7 @@ final as (
             THEN (
                 SELECT CAST(MAX(id) as {{ dbt.type_string() }})  -- Using MAX to ensure single result
                 FROM account a
-                WHERE a.source_relation = source_relation 
+                WHERE a.source_relation = account.source_relation 
                 AND cast(a.account_number as {{ dbt.type_string() }}) = '1100'
             )
         ELSE cast(parent_account_id as {{ dbt.type_string() }}) 
@@ -89,7 +89,7 @@ final as (
             where a.active = true
         )
     )) AND (
-        (source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
+        --(source_relation = 'quickbooks_bhdsc' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bhec' and account_number <> '1116' and account_number <> '1120') or 
         (source_relation = 'quickbooks_bvsc' and account_number <> '1110')
     )
