@@ -59,11 +59,11 @@ final as (
         a.classification,
         a.balance,
         a.balance_with_sub_accounts,
-        case 
-            when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
-                false
-            else active
-        end as is_active,
+        CASE 
+            WHEN a.account_sub_type = 'AccountsReceivable' and a.balance = 0 and a.balance_with_sub_accounts = 0 
+            THEN false
+            ELSE a.active
+        END as is_active,
         a.created_at,
         a.currency_id,
         a.description,
@@ -80,4 +80,4 @@ final as (
 
 select *
 from final
-where is_active = true and not coalesce(_fivetran_deleted, false)
+where not coalesce(_fivetran_deleted, false)
