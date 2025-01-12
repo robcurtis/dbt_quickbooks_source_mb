@@ -42,7 +42,7 @@ final as (
         balance,
         balance_with_sub_accounts,
         CASE 
-            WHEN account_sub_type = 'AccountsReceivable' and balance != 0 and balance_with_sub_accounts != 0 
+            WHEN account_sub_type = 'AccountsReceivable' and balance = 0 and balance_with_sub_accounts = 0 
                 THEN false 
             ELSE active 
         END as is_active,
