@@ -33,8 +33,8 @@ final as (
     select
         cast(id as {{ dbt.type_string() }}) as account_id,
         cast(account_number as {{ dbt.type_string() }}) as account_number,
-        is_sub_account,
-        parent_account_id,
+        sub_account as is_sub_account,
+        cast(parent_account_id as {{ dbt.type_string() }}) as parent_account_id,
         name,
         account_type,
         account_sub_type,
@@ -52,7 +52,7 @@ final as (
         fully_qualified_name,
         updated_at,
         source_relation,
-        _fivetran_deleted 
+        _fivetran_deleted
 
     from account
 )
