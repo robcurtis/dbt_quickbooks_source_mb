@@ -208,3 +208,7 @@ Reference to the item
 {% docs _fivetran_deleted %}
 Boolean created by Fivetran to indicate whether the record has been deleted.
 {% enddocs %}
+
+{% docs tax_code_id %}
+Unique identifier for the tax code associated with the transaction. Tax codes are used to track the taxable or non-taxable nature of products, services, and customers' tax status.
+{% enddocs %}
