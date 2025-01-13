@@ -47,6 +47,10 @@ Table containing individual records of credit memos.
 Table containing credit memo records. A credit memo is a refund or credit of payment or part of a payment for goods or services that have been sold.
 {% enddocs %}
 
+{% docs credit_memo_line_bundle_table %}
+Table containing line items of a credit memo.
+{% enddocs %}
+
 {% docs customer_table %}
 Table containing customers of which are consumers of the service or product that your business offers.
 {% enddocs %}

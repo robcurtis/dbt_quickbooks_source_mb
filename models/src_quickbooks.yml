@@ -308,7 +308,44 @@ sources:
             description: Timestamp of the date which the credit memo was last updated.
           - name: _fivetran_deleted
             description: "{{ doc('_fivetran_deleted') }}"
-
+      
+      - name: credit_memo_line_bundle
+        identifier: "{{ var('quickbooks_credit_memo_line_bundle_identifier', 'credit_memo_line_bundle') }}"
+        description: "{{ doc('credit_memo_line_bundle_table') }}" 
+        columns:
+          - name: credit_memo_id
+            description: "{{ doc('id') }} credit memo line bundle."
+          - name: credit_memo_line_index
+            description: Index count of records associated with the credit memo line bundle.
+          - name: index
+            description: Index count of records associated with the credit memo line bundle.
+          - name: line_num
+            description: Line number of the credit memo line bundle.
+          - name: description
+            description: Description of the credit memo line bundle.
+          - name: amount
+            description: "{{ doc('amount') }} of the credit memo line bundle."
+          - name: unit_price
+            description: Unit price of the credit memo line bundle.
+          - name: service_date
+            description: Service date of the credit memo line bundle.
+          - name: discount_rate
+            description: Discount rate of the credit memo line bundle.
+          - name: item_id
+            description: "{{ doc('item_id') }} associated with the credit memo line bundle."
+          - name: class_id
+            description: "{{ doc('class_id') }} with the credit memo line bundle."
+          - name: quantity
+            description: Quantity of the credit memo line bundle.
+          - name: account_id
+            description: "{{ doc('account_id') }} with the credit memo line bundle."
+          - name: tax_code_id
+            description: "{{ doc('tax_code_id') }} with the credit memo line bundle."
+          - name: discount_amount
+            description: Discount amount of the credit memo line bundle.
+          - name: _fivetran_deleted
+            description: "{{ doc('_fivetran_deleted') }}"
+    
       - name: customer
         identifier: "{{ var('quickbooks_customer_identifier', 'customer') }}"
         description: "{{ doc('customer_table') }}" 
