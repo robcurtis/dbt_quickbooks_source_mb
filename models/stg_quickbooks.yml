@@ -424,7 +424,7 @@ models:
       - name: account_id
         description: "{{ doc('account_id') }} with the credit memo line bundle."
       - name: tax_code_id
-        description: "{{ doc('tax_code_id') }} with the credit memo line bundle."
+        description: "Tax code ID with the credit memo line bundle."
       - name: discount_amount
         description: Discount amount of the credit memo line bundle.
       - name: _fivetran_deleted
