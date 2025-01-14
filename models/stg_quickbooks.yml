@@ -17,10 +17,10 @@ models:
         description: "{{ doc('source_relation') }}"
       - name: account_number
         description: User-defined account number intended to identify the account within the Chart of Accounts.
-       - name: original_is_sub_account
-        description: Specifies whether this object represents a parent (false) or a sub_account (true).
+      - name: original_is_sub_account
+        description: Specifies whether this object represents a parent or a sub_account.
       - name: is_sub_account
-        description: Specifies whether this object represents a parent (false) or a sub_account (true).
+        description: Specifies whether this object represents a parent or a sub_account.
       - name: original_parent_account_id
         description: User entered description for the account.
       - name: parent_account_id
