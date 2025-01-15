@@ -83,4 +83,4 @@ final as (
 
 select *
 from final
-where not coalesce(_fivetran_deleted, false)
+where is_active = true and not coalesce(_fivetran_deleted, false)
