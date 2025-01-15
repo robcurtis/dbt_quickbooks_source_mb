@@ -41,15 +41,32 @@ final as (
     select
         cast(a.id as {{ dbt.type_string() }}) as account_id,
         cast(a.account_number as {{ dbt.type_string() }}) as account_number,
-        a.sub_account as is_sub_account,
-        cast(a.parent_account_id as {{ dbt.type_string() }}) as parent_account_id,
+        a.sub_account as original_is_sub_account,
+        case 
+            when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then true
+            else a.sub_account
+        end as is_sub_account,
+        cast(a.parent_account_id as {{ dbt.type_string() }}) as original_parent_account_id,
+        case 
+            when a.account_sub_type = 'AccountsReceivable' and ar.ar_rank > 1 then 
+                (select cast(ar2.id as {{ dbt.type_string() }})
+                 from ar_accounts ar2
+                 where ar2.ar_rank = 1 
+                 and ar2.source_relation = a.source_relation)
+            else cast(a.parent_account_id as {{ dbt.type_string() }})
+        end as parent_account_id,
         a.name,
         a.account_type,
         a.account_sub_type,
         a.classification,
         a.balance,
         a.balance_with_sub_accounts,
-        a.active as is_active,
+        a.active as original_is_active,
+        CASE 
+            WHEN a.account_sub_type = 'AccountsReceivable' and a.balance = 0 and a.balance_with_sub_accounts = 0 
+            THEN false
+            ELSE a.active
+        END as is_active,
         a.created_at,
         a.currency_id,
         a.description,
